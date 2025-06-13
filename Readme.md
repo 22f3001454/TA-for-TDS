@@ -7,7 +7,7 @@ This repository contains all the scripts and configurations needed to scrape dat
 ## 🧾 Step 1: Scrape Course Content from GitHub
 
 - Run `course_scrape.py` to scrape course content hosted by **Mr. S Anand** on GitHub.
-
+- Run ` create_json.py` to store in json format.
 ---
 
 ## 🗓 Step 2: Scrape TDS Discourse Posts (from 1 Jan 2025 to 14 Apr 2025)
