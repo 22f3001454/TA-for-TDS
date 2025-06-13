@@ -46,7 +46,8 @@ async def process_chunks(chunks_path):
                 "metadata": {
                     "text": text,
                     "source": "chunk",
-                    "original_id": chunk.get("id", "")
+                    "original_id": chunk.get("id", ""),
+                    "url": chunk.get("url", "")
                 }
             })
         except Exception as e:
@@ -75,7 +76,8 @@ async def process_threads(threads_path):
                         "thread_title": title,
                         "post_url": post.get("url"),
                         "created_by": post.get("created_by"),
-                        "type": post.get("type")
+                        "type": post.get("type"),
+                        "images_base64": post.get("images_base64", [])
                     }
                 })
             except Exception as e:
