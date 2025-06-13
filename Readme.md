@@ -59,4 +59,7 @@ This repository contains all the scripts and configurations needed to scrape dat
 
   ```
 
-- Run promptfoo eval -c promptfoo.yaml --clear-cache
+- Run
+  ```bash
+  promptfoo eval -c promptfoo.yaml --clear-cache
+```
