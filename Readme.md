@@ -47,6 +47,7 @@ This repository contains all the scripts and configurations needed to scrape dat
   - `OPENAI_API_KEY` or your **AIPipe key**
   - `QDRANT_API_KEY` from Qdrant
   - `QDRANT_URL` (your Qdrant cluster URL)
+  -  `OPENAI_BASE_URL`
 - Run the deployment script (e.g., `main.py` or `api.py` depending on your implementation).
 
 ## ✅ Step 6: Test Responses Using Promptfoo
@@ -65,3 +66,5 @@ This repository contains all the scripts and configurations needed to scrape dat
   promptfoo eval -c promptfoo.yaml --clear-cache
 
   ```
+## ✅ Step 7 : **Deploy to Vercel**:  
+Structure your project with `vercel.json`, `requirements.txt`, and an `api/` folder containing `main.py` and `.env`. Push to GitHub, import the repo into [vercel.com](https://vercel.com), and in **Project Settings → Environment Variables**, add `OPENAI_API_KEY` , `OPENAI_BASE_URL` and `QDRANT_API_KEY` as per your `.env` file. Vercel will auto-deploy your FastAPI app at `https://<project-name>.vercel.app/api/`.
