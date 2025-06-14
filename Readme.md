@@ -31,6 +31,7 @@ This repository contains all the scripts and configurations needed to scrape dat
 ## ☁️ Step 4: Upload to Qdrant Cloud
 
 - Create a **cluster** in [Qdrant Cloud](https://qdrant.tech/).
+  -  Create a **cluster** with size 1536 and distance Cosine.   
 - Replace the following in your script:
   - `QDRANT_URL` with your Qdrant cluster URL.
   - `QDRANT_API_KEY` with your Qdrant API key.
