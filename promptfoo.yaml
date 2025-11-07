@@ -12,7 +12,7 @@ providers:
           "question": "{{ question }}"
         }
       transformResponse: json
-      apiKey: eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIyZjMwMDE0NTRAZHMuc3R1ZHkuaWl0bS5hYy5pbiJ9.nMYFZLlaLpa9YSwhFAjc_ZomtOlFHFxhCdPh8OLqadg
+      apiKey: eyJhbhjskdj
       apiBaseUrl: https://aipipe.org/openai/v1
 
 defaultTest:
