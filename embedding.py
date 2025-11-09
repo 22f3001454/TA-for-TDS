@@ -5,10 +5,10 @@ import asyncio
 import httpx
 from typing import List
 
-# Load AIProxy token from environment
-AIPROXY_TOKEN = os.getenv("AIPROXY_TOKEN")
-if not AIPROXY_TOKEN:
-    raise EnvironmentError("Missing AIPROXY_TOKEN")
+# Load AIPipe token from environment
+AIPIPE_TOKEN = os.getenv("AIPIPE_TOKEN")
+if not AIPIPE_TOKEN:
+    raise EnvironmentError("Missing AIPIPE_TOKEN")
 
 # Constants
 EMBEDDING_URL = "https://aipipe.org/openai/v1/embeddings"
@@ -17,7 +17,7 @@ OUTPUT_FILE = "vectors.json"
 
 async def get_embedding(text: str) -> List[float]:
     headers = {
-        "Authorization": f"Bearer {AIPROXY_TOKEN}",
+        "Authorization": f"Bearer {AIPIPE_TOKEN}",
         "Content-Type": "application/json"
     }
     payload = {
@@ -85,8 +85,17 @@ async def process_threads(threads_path):
     return results
 
 async def main():
-    chunks_vectors = await process_chunks("chunks.json")
-    threads_vectors = await process_threads("tds_threads.json")
+    import os
+    chunks_file = "chunks.json"
+    threads_file = "tds_threads.json"
+    
+    if not os.path.exists(chunks_file):
+        raise FileNotFoundError(f"Required file not found: {chunks_file}")
+    if not os.path.exists(threads_file):
+        raise FileNotFoundError(f"Required file not found: {threads_file}")
+    
+    chunks_vectors = await process_chunks(chunks_file)
+    threads_vectors = await process_threads(threads_file)
 
     all_vectors = chunks_vectors + threads_vectors
     print(f"✅ Total vectors created: {len(all_vectors)}")

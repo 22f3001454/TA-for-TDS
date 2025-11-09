@@ -4,10 +4,32 @@ This repository contains all the scripts and configurations needed to scrape dat
 
 ---
 
+## ⚙️ Environment Setup
+
+Before running any scripts, create a `.env` file in the root directory with the following variables:
+
+```env
+# OpenAI/AIPipe Configuration
+OPENAI_API_KEY=your-openai-or-aipipe-api-key-here
+OPENAI_BASE_URL=https://aipipe.org/openai/v1
+
+# AIPipe Token (for embedding generation script)
+AIPIPE_TOKEN=your-aipipe-token-here
+
+# Qdrant Configuration
+QDRANT_URL=your-qdrant-cluster-url-here
+QDRANT_API_KEY=your-qdrant-api-key-here
+QDRANT_COLLECTION=tds_kb
+```
+
+**Note:** All scripts now use environment variables instead of hardcoded values for better security and flexibility.
+
+---
+
 ## 🧾 Step 1: Scrape Course Content from GitHub
 
 - Run `course_scrape.py` to scrape course content hosted by **Mr. S Anand** on GitHub.
-- Run ` create_json.py` to store in json format.
+- Run `creating_json.py` to store in json format.
 ---
 
 ## 🗓 Step 2: Scrape TDS Discourse Posts (from 1 Jan 2025 to 14 Apr 2025)
@@ -22,9 +44,9 @@ This repository contains all the scripts and configurations needed to scrape dat
 
 ## 🧠 Step 3: Generate Embeddings
 
-- Set your `AIPIPE_TOKEN` in the script.
+- Ensure your `.env` file has `AIPIPE_TOKEN` set (see Environment Setup section above).
 - Run `embedding.py` to create embeddings from the scraped content.
-- The embeddings will be saved in a `.json` file.
+- The embeddings will be saved in `vectors.json`.
 
 ---
 
@@ -32,23 +54,27 @@ This repository contains all the scripts and configurations needed to scrape dat
 
 - Create a **cluster** in [Qdrant Cloud](https://qdrant.tech/).
   -  Create a **cluster** with size 1536 and distance Cosine.   
-- Replace the following in your script:
-  - `QDRANT_URL` with your Qdrant cluster URL.
-  - `QDRANT_API_KEY` with your Qdrant API key.
-  - `COLLECTION_NAME` with your desired collection name.
-- Run `upload_qdrant`.py to upload the embedding in Qdrant.
+- Add the following to your `.env` file:
+  - `QDRANT_URL` - your Qdrant cluster URL
+  - `QDRANT_API_KEY` - your Qdrant API key
+  - `QDRANT_COLLECTION` - your desired collection name (optional, defaults to "tds_kb")
+- Run `upload_qdrant.py` to upload the embeddings to Qdrant.
 
 ---
 
 ## 🚀 Step 5: Deploy API Endpoint
 
-- cd api
-- Ensure the following keys are added to your `.env` file:
-  - `OPENAI_API_KEY` or your **AIPipe key**
-  - `QDRANT_API_KEY` from Qdrant
-  - `QDRANT_URL` (your Qdrant cluster URL)
-  -  `OPENAI_BASE_URL`
-- Run the deployment script (e.g., `main.py` or `api.py` depending on your implementation).
+- Ensure the following keys are added to your `.env` file in the root directory:
+  - `OPENAI_API_KEY` - your **AIPipe key** or OpenAI API key
+  - `OPENAI_BASE_URL` - base URL for OpenAI API (defaults to "https://aipipe.org/openai/v1" if not set)
+  - `QDRANT_API_KEY` - from Qdrant
+  - `QDRANT_URL` - your Qdrant cluster URL
+- To run locally:
+  ```bash
+  cd api
+  uvicorn main:app --reload
+  ```
+- The API will be available at `http://localhost:8000/api`
 
 ## ✅ Step 6: Test Responses Using Promptfoo
 
@@ -67,4 +93,11 @@ This repository contains all the scripts and configurations needed to scrape dat
 
   ```
 ## ✅ Step 7 : **Deploy to Vercel**:  
-Structure your project with `vercel.json`, `requirements.txt`, and an `api/` folder containing `main.py` and `.env`. Push to GitHub, import the repo into [vercel.com](https://vercel.com), and in **Project Settings → Environment Variables**, add `OPENAI_API_KEY` , `OPENAI_BASE_URL` and `QDRANT_API_KEY` as per your `.env` file. Vercel will auto-deploy your FastAPI app at `https://<project-name>.vercel.app/api/`.
+Structure your project with `vercel.json`, `requirements.txt`, and an `api/` folder containing `main.py`. Push to GitHub, import the repo into [vercel.com](https://vercel.com), and in **Project Settings → Environment Variables**, add the following:
+  - `OPENAI_API_KEY`
+  - `OPENAI_BASE_URL` (optional, defaults to "https://aipipe.org/openai/v1")
+  - `QDRANT_API_KEY`
+  - `QDRANT_URL`
+  - `QDRANT_COLLECTION` (optional, defaults to "tds_kb")
+
+Vercel will auto-deploy your FastAPI app at `https://<project-name>.vercel.app/api/`.

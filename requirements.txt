@@ -4,3 +4,6 @@ httpx
 python-dotenv
 qdrant-client
 pydantic
+beautifulsoup4
+tiktoken
+requests

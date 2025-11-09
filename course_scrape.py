@@ -52,7 +52,7 @@ def export_files(file_map):
             try:
                 shutil.copy(src, export_dir)
             except Exception as e:
-                print(f"❌ Failed to copy {src}: {e}")
+                print(f" Failed to copy {src}: {e}")
 
 def main():
     clone_repo()

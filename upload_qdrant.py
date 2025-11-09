@@ -3,11 +3,20 @@ import json
 import httpx
 import asyncio
 from typing import List
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Qdrant settings
-QDRANT_URL = "your-qdrant-url"  # Replace with your Qdrant URL
-QDRANT_API_KEY = "your-qdrant-api-key"  # Replace with your Qdrant API key
-COLLECTION_NAME = "tds_kb"
+QDRANT_URL = os.getenv("QDRANT_URL")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+COLLECTION_NAME = os.getenv("QDRANT_COLLECTION", "tds_kb")
+
+if not QDRANT_URL:
+    raise ValueError("QDRANT_URL environment variable is required")
+if not QDRANT_API_KEY:
+    raise ValueError("QDRANT_API_KEY environment variable is required")
 
 HEADERS = {
     "Authorization": f"Bearer {QDRANT_API_KEY}",

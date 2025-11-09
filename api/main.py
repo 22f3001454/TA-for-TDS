@@ -12,9 +12,18 @@ from textwrap import shorten
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+QDRANT_URL = os.getenv("QDRANT_URL")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://aipipe.org/openai/v1")
 
-EMBEDDING_URL = "https://aipipe.org/openai/v1/embeddings"
-CHAT_URL = "https://aipipe.org/openai/v1/chat/completions"
+if not OPENAI_API_KEY:
+    raise ValueError("OPENAI_API_KEY environment variable is required")
+if not QDRANT_API_KEY:
+    raise ValueError("QDRANT_API_KEY environment variable is required")
+if not QDRANT_URL:
+    raise ValueError("QDRANT_URL environment variable is required")
+
+EMBEDDING_URL = f"{OPENAI_BASE_URL}/embeddings"
+CHAT_URL = f"{OPENAI_BASE_URL}/chat/completions"
 EMBEDDING_MODEL = "text-embedding-3-small"
 CHAT_MODEL = "gpt-4o-mini"
 QDRANT_COLLECTION = "tds_kb"
@@ -22,12 +31,15 @@ QDRANT_COLLECTION = "tds_kb"
 # Initialize FastAPI app
 app = FastAPI()
 app.add_middleware(
-    CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]
+    CORSMiddleware, 
+    allow_origins=["*"],  # TODO: Restrict to specific origins in production
+    allow_methods=["*"], 
+    allow_headers=["*"]
 )
 
 # Initialize Qdrant client
 client = QdrantClient(
-    url="https://5746a4d0-16c1-4e22-b0c1-3be2674559c5.us-west-2-0.aws.cloud.qdrant.io:6333",
+    url=QDRANT_URL,
     api_key=QDRANT_API_KEY,
 )
 
@@ -43,8 +55,8 @@ async def get_embedding(text: str):
         "Content-Type": "application/json"
     }
     payload = {"model": EMBEDDING_MODEL, "input": text}
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        resp = await client.post(EMBEDDING_URL, headers=headers, json=payload)
+    async with httpx.AsyncClient(timeout=30.0) as http_client:
+        resp = await http_client.post(EMBEDDING_URL, headers=headers, json=payload)
         resp.raise_for_status()
         return resp.json()["data"][0]["embedding"]
 
@@ -83,8 +95,8 @@ async def generate_gpt_answer(question: str, context: str, images: list):
 
     payload = {"model": CHAT_MODEL, "messages": messages}
 
-    async with httpx.AsyncClient(timeout=60.0) as client:
-        resp = await client.post(CHAT_URL, headers=headers, json=payload)
+    async with httpx.AsyncClient(timeout=60.0) as http_client:
+        resp = await http_client.post(CHAT_URL, headers=headers, json=payload)
         resp.raise_for_status()
         return resp.json()["choices"][0]["message"]["content"]
 

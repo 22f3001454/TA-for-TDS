@@ -3,7 +3,7 @@ description: "TDS Virtual TA Evaluation - AIPipe + FastAPI Test"
 providers:
   - id: https
     config:
-      url: http://127.0.0.1:8000/api # Use your deployed URL in production
+      url: http://127.0.0.1:8000/api
       method: POST
       headers:
         Content-Type: application/json
@@ -12,7 +12,7 @@ providers:
           "question": "{{ question }}"
         }
       transformResponse: json
-      apiKey: eyJhbhjskdj
+      # apiKey: your-api-key-here (if needed for external API calls)
       apiBaseUrl: https://aipipe.org/openai/v1
 
 defaultTest:

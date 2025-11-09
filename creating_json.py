@@ -42,29 +42,30 @@ def main():
             with open(path, "r", encoding="utf-8") as f:
                 content = f.read()
         except Exception as e:
-            print(f"❌ Skipped {path}: {e}")
+            print(f" Skipped {path}: {e}")
             continue
 
         chunks = split_markdown(content)
         for idx, chunk in enumerate(chunks):
-            id=f"{path}#{idx}"
-            if id:
-                try:
-                    # Normalize slashes (\\ to /)
-                    path = id.replace("\\", "/")
+            chunk_id = f"{path}#{idx}"
+            url = ""
+            try:
+                # Normalize slashes (\\ to /)
+                normalized_path = chunk_id.replace("\\", "/")
 
-                    # Extract just the filename
-                    filename = os.path.basename(path)              # "embeddings.md#0"
-                    base = re.sub(r"\.md.*$", "", filename)        # remove .md and anything after it
+                # Extract just the filename
+                filename = os.path.basename(normalized_path)              # "embeddings.md#0"
+                base = re.sub(r"\.md.*$", "", filename)        # remove .md and anything after it
 
-                    # Construct final URL
-                    url = f"https://tds.s-anand.net/#/{base}"
-                except Exception as e:
-                    print(f"Error processing {id}: {e}")
+                # Construct final URL
+                url = f"https://tds.s-anand.net/#/{base}"
+            except Exception as e:
+                print(f"Error processing {chunk_id}: {e}")
+            
             all_chunks.append({
-                "id": f"{path}#{idx}",
+                "id": chunk_id,
                 "content": chunk,
-                "url":url
+                "url": url
             })
 
     with open(OUTPUT_FILE, "w", encoding="utf-8") as out:
