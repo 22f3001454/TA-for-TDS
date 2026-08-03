@@ -1,10 +1,10 @@
-# 📘 TDS TA Repository
+# TDS TA Repository
 
 This repository contains all the scripts and configurations needed to scrape data, generate embeddings, store vectors in Qdrant, and deploy an API for the **TDS (Tools in Data Science)** course.
 
 ---
 
-## ⚙️ Environment Setup
+## Environment Setup
 
 Before running any scripts, create a `.env` file in the root directory with the following variables:
 
@@ -26,13 +26,13 @@ QDRANT_COLLECTION=tds_kb
 
 ---
 
-## 🧾 Step 1: Scrape Course Content from GitHub
+## Step 1: Scrape Course Content from GitHub
 
 - Run `course_scrape.py` to scrape course content hosted by **Mr. S Anand** on GitHub.
 - Run `creating_json.py` to store in json format.
 ---
 
-## 🗓 Step 2: Scrape TDS Discourse Posts (from 1 Jan 2025 to 14 Apr 2025)
+## Step 2: Scrape TDS Discourse Posts (from 1 Jan 2025 to 14 Apr 2025)
 
 - Run `discourse_scrape.py` to scrape posts from the TDS Discourse forum.
 - Replace the cookie values (`_t` and `_forum_session`) in the script:
@@ -42,7 +42,7 @@ QDRANT_COLLECTION=tds_kb
 
 ---
 
-## 🧠 Step 3: Generate Embeddings
+## Step 3: Generate Embeddings
 
 - Ensure your `.env` file has `AIPIPE_TOKEN` set (see Environment Setup section above).
 - Run `embedding.py` to create embeddings from the scraped content.
@@ -50,7 +50,7 @@ QDRANT_COLLECTION=tds_kb
 
 ---
 
-## ☁️ Step 4: Upload to Qdrant Cloud
+## Step 4: Upload to Qdrant Cloud
 
 - Create a **cluster** in [Qdrant Cloud](https://qdrant.tech/).
   -  Create a **cluster** with size 1536 and distance Cosine.   
@@ -62,7 +62,7 @@ QDRANT_COLLECTION=tds_kb
 
 ---
 
-## 🚀 Step 5: Deploy API Endpoint
+## Step 5: Deploy API Endpoint
 
 - Ensure the following keys are added to your `.env` file in the root directory:
   - `OPENAI_API_KEY` - your **AIPipe key** or OpenAI API key
@@ -76,9 +76,9 @@ QDRANT_COLLECTION=tds_kb
   ```
 - The API will be available at `http://localhost:8000/api`
 
-## ✅ Step 6: Test Responses Using Promptfoo
+##  Step 6: Test Responses Using Promptfoo
 
-### 📂 Setup
+### Setup
 
 - Make sure `promptfoo` is installed globally or in your environment:
 
@@ -92,7 +92,7 @@ QDRANT_COLLECTION=tds_kb
   promptfoo eval -c promptfoo.yaml --clear-cache
 
   ```
-## ✅ Step 7 : **Deploy to Vercel**:  
+##  Step 7 : **Deploy to Vercel**:  
 Structure your project with `vercel.json`, `requirements.txt`, and an `api/` folder containing `main.py`. Push to GitHub, import the repo into [vercel.com](https://vercel.com), and in **Project Settings → Environment Variables**, add the following:
   - `OPENAI_API_KEY`
   - `OPENAI_BASE_URL` (optional, defaults to "https://aipipe.org/openai/v1")
